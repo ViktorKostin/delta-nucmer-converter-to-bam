@@ -60,7 +60,7 @@ def mutations_to_cigar(mutations, contig_length, chunk_size):
             cigar.append((0,mutation-1))
             cigar.append((2,1))
         elif(mutation < 1):
-            cigar.append((0,abs(mutation-1)))
+            cigar.append((0,abs(mutation)-1))
             cigar.append((1,1))
     return cigar
 
@@ -128,7 +128,7 @@ def delta_d_to_chunks(delta, assembly, ref_name):
 def create_bam(fname, assembly, delta, reference_len, ref_name):
     header = { 'HD': {'VN': '1.0'},
                 'SQ': [{'LN': reference_len, 'SN': ref_name}] }
-    with pysam.AlignmentFile('/home/viktor/computational_biology/{}'.format(fname), "wb", header=header) as outf:
+    with pysam.AlignmentFile('./{}'.format(fname), "wb", header=header) as outf:
         for chunk in delta_d_to_chunks(delta, assembly, ref_name):
             a = pysam.AlignedSegment()
             a.query_name = chunk['name']
